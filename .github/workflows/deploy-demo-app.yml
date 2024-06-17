@@ -18,17 +18,35 @@ jobs:
   demoapp:
     name: Deploy demo app to GitHub Pages
     timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{steps.deployment.outputs.page_url}}
     permissions:
       contents: write
+      pages: write
+      id-token: write
     runs-on:
       - ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy app according to choosen version
-        run: |
-          rsync -av ./${{ inputs.appVersion }}/ ./docs/
+      # - name: Deploy app according to choosen version
+      #   run: |
+      #     rsync -av ./${{ inputs.appVersion }}/ ./docs/
 
-      - name: Commit and push changes
-        id: commit-and-push
-        uses: EndBug/add-and-commit@v9
+      # - name: Commit and push changes
+      #   id: commit-and-push
+      #   uses: EndBug/add-and-commit@v9
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          # upload entire directory
+          path: './${{ inputs.appVersion }}'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
