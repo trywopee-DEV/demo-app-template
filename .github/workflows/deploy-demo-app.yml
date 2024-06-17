@@ -18,6 +18,8 @@ jobs:
   demoapp:
     name: Deploy demo app to GitHub Pages
     timeout-minutes: 5
+    permissions:
+      contents: write
     runs-on:
       - ubuntu-latest
     steps:
