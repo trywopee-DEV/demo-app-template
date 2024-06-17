@@ -1,4 +1,4 @@
-name: Deploy demo app to GitHub Pages
+name: Deploy demo app
 run-name: "Deploy demo app: (${{ inputs.appVersion }})"
 
 on:
@@ -30,21 +30,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - name: Deploy app according to choosen version
-      #   run: |
-      #     rsync -av ./${{ inputs.appVersion }}/ ./docs/
-
-      # - name: Commit and push changes
-      #   id: commit-and-push
-      #   uses: EndBug/add-and-commit@v9
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # upload entire directory
           path: './${{ inputs.appVersion }}'
       
       - name: Deploy to GitHub Pages
