@@ -1,0 +1,32 @@
+name: Deploy demo app to GitHub Pages
+run-name: "Deploy demo app: (${{ inputs.appVersion }})"
+
+on:
+  workflow_dispatch:
+    inputs:
+      appVersion:
+        type: choice
+        description: "App version to be deployed"
+        required: false
+        default: "demo-app-v1"
+        options:
+        - demo-app-v1
+        - demo-app-v2
+        - demo-app-v3
+      
+jobs:
+  demoapp:
+    name: Deploy demo app to GitHub Pages
+    timeout-minutes: 5
+    runs-on:
+      - ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy app according to choosen version
+        run: |
+          rsync -av ./${{ inputs.appVersion }}/ ./docs/
+
+      - name: Commit and push changes
+        id: commit-and-push
+        uses: EndBug/add-and-commit@v9
